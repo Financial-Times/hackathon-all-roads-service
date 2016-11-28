@@ -1,0 +1,25 @@
+suggestorHost: localhost
+suggestorPort: 8080
+
+contentApiUrl: http://api.ft.com
+contentApiAuthKey: ${CONTENT_API_AUTH_KEY}
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 9090
+
+  adminConnectors:
+      - type: http
+        port: 9091
+
+logging:
+  level: INFO
+
+  loggers:
+    io.dropwizard: DEBUG
+    com.ft.jerseyhttpwrapper.AttemptLogger: WARN
+
+  appenders:
+    - type: console
+      logFormat: "%-5p [%d{ISO8601, GMT}] %c: %X{transaction_id} %m [%thread]%n%xEx"
