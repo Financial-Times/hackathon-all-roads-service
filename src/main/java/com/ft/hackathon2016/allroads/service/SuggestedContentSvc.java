@@ -53,8 +53,8 @@ public class SuggestedContentSvc {
     ArrayList<SuggestedContent> suggestedContents = new ArrayList<SuggestedContent>();
     for (int i = 0; i < contentItemIdentifiers.size(); i++){
 
-      String articleUri = "http://api.ft.com/enrichedcontent/3aa9db96-b25f-11e6-9c37-5787335499a0";
-      //String articleUri = contentItemIdentifiers.get(i).getEnrichedContentApiUrl();
+      //String articleUri = "http://api.ft.com/enrichedcontent/3aa9db96-b25f-11e6-9c37-5787335499a0";
+      String articleUri = contentItemIdentifiers.get(i).getEnrichedContentApiUrl();
       Article article = getArticle(articleUri);
 
       suggestedContents.add(new SuggestedContent(
