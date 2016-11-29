@@ -18,4 +18,8 @@ public class ContentItemIdentifier {
         return apiUrl;
     }
 
+    public String getEnrichedContentApiUrl() {
+        return apiUrl.replaceAll("content","enrichedcontent");
+    }
+
 }

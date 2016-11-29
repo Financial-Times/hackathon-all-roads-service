@@ -1,6 +1,7 @@
 package com.ft.hackathon2016.allroads.fetchers;
 
 import com.ft.hackathon2016.allroads.config.AllRoadsConfiguration;
+import com.ft.hackathon2016.allroads.model.Annotation;
 import com.ft.hackathon2016.allroads.model.Article;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -30,7 +32,8 @@ public class ContentApiClient {
     public Article getArticleByUuid(final String articleId){
         logger.debug("Retrieving content details for article={}", articleId);
         UriBuilder uriBuilder = UriBuilder.fromPath(config.getContentApiUrl())
-                .path("content")
+                //.path("content")
+                .path("enrichedcontent")
                 .path(articleId)
                 ;
         final Response response = client.target(uriBuilder)
@@ -107,14 +110,31 @@ public class ContentApiClient {
     }
 
     private Article contentApiResponseToArticle(final ContentApiGetArticleResponse contentApiGetArticleResponse) {
-       return new Article(
+
+        Annotation annotation = getMostPertinentAnnotation(contentApiGetArticleResponse);
+        return new Article(
                     contentApiGetArticleResponse.getId(),
                     contentApiGetArticleResponse.getTitle(),
                     contentApiGetArticleResponse.getByline(),
                     contentApiGetArticleResponse.getPublishedDate(),
                     contentApiGetArticleResponse.getWebUrl(),
-                    contentApiGetArticleResponse.getStandfirst()
+                    contentApiGetArticleResponse.getStandfirst(),
+                    annotation
        );
+
+    }
+
+    private Annotation getMostPertinentAnnotation(ContentApiGetArticleResponse contentApiGetArticleResponse) {
+        List<Annotation> allTopics = contentApiGetArticleResponse.getAnnotations()
+                .stream()
+                .filter(a -> "TOPIC".equals (a.getType()))
+                .collect(Collectors.toList());
+
+        // todo what if there are no topics?
+
+        logger.info(allTopics.size() + " topic annotations found for this article: " + contentApiGetArticleResponse.getWebUrl()
+                + contentApiGetArticleResponse.getTitle());
+        return allTopics.get(0);
 
     }
 }

@@ -6,13 +6,16 @@ public class SuggestedContent {
   private String publishedDate;
   private String byline;
   private String standfirst;
+  private Annotation annotation;
 
-  public SuggestedContent(String title, String webUrl, String publishedDate, String byline, String standfirst) {
+  public SuggestedContent(String title, String webUrl, String publishedDate,
+                          String byline, String standfirst, Annotation annotation) {
     this.title = title;
     this.webUrl = webUrl;
     this.publishedDate = publishedDate;
     this.byline = byline;
     this.standfirst = standfirst;
+    this.annotation = annotation;
   }
   
   public String getTitle() {
@@ -33,5 +36,9 @@ public class SuggestedContent {
 
   public String getStandfirst() {
     return standfirst;
+  }
+
+  public Annotation getAnnotation() {
+    return annotation;
   }
 }
