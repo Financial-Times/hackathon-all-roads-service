@@ -73,14 +73,18 @@ public class TopStoriesApiClient {
     LOG.info("there are {} concepts for top stories suggestions", topStoriesSuggestions.size());
   }
   
-  public Set<SuggestedContent> getTopStoriesMatchingConcepts(String... conceptIds) {
-    Set<SuggestedContent> suggestions = new HashSet<>();
+  public List<SuggestedContent> getTopStoriesMatchingConcepts(int max, String... conceptIds) {
+    List<SuggestedContent> suggestions = new ArrayList<>();
     
     for (String id : conceptIds) {
       Set<SuggestedContent> forConcept = topStoriesSuggestions.get(id);
       if (forConcept != null) {
         suggestions.addAll(forConcept);
       }
+    }
+    
+    if (suggestions.size() > max) {
+      suggestions = suggestions.subList(0, max);
     }
     
     return suggestions;

@@ -34,6 +34,7 @@ public class SuggestedContentSvc {
   }
 
   public List<SuggestedContent> getSuggestedContent(String inputText){
+    ArrayList<SuggestedContent> suggestedContents = new ArrayList<SuggestedContent>();
 
     String conceptId;
     if (config.isMockSuggestorApi()){
@@ -46,6 +47,9 @@ public class SuggestedContentSvc {
       if (concepts.isEmpty()) {
         return Collections.emptyList();
       }
+      
+      suggestedContents.addAll(topStoriesApiClient.getTopStoriesMatchingConcepts(3, concepts.toArray(new String[0])));
+      
       String conceptUri = concepts.get(0);
       conceptId = conceptUri.replaceFirst(".+things/","");
     }
@@ -55,7 +59,6 @@ public class SuggestedContentSvc {
     // Only take 5 .. it could be a very long list
     List<ContentItemIdentifier> contentItemIdentifiers = allContentItemIdentifiers.subList(0,5);
 
-    ArrayList<SuggestedContent> suggestedContents = new ArrayList<SuggestedContent>();
     for (int i = 0; i < contentItemIdentifiers.size(); i++){
 
       //String articleUri = "http://api.ft.com/enrichedcontent/3aa9db96-b25f-11e6-9c37-5787335499a0";
