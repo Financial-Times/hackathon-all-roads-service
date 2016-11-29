@@ -20,28 +20,30 @@ public class SuggestedContentSvc {
   private static final Logger logger = LoggerFactory.getLogger(SuggestedContentSvc.class);
   private final ContentApiClient contentApiClient;
   private final SuggestorApiClient suggestorApiClient;
+  private final AllRoadsConfiguration config;
 
   public SuggestedContentSvc (AllRoadsConfiguration config){
+    this.config = config;
     contentApiClient = new ContentApiClient(config, ClientBuilder.newClient());
     suggestorApiClient = new SuggestorApiClient(ClientBuilder.newClient(), config.getSuggestorHost(), config.getSuggestorPort());
   }
 
   public List<SuggestedContent> getSuggestedContent(String inputText){
-    logger.warn("IN GETSUGGESTEDCONTENT, ABOUT TO CALL SUGGESTOR CLIENT");
 
-    // comment out this chunk if running locally
-    List<String> concepts = suggestorApiClient.suggestConcepts(inputText);
-    logger.warn(String.format("FOUND %s CONCEPTS",concepts.size()));
-    if (concepts.isEmpty()) {
-      return Collections.emptyList();
+    String conceptId;
+    if (config.isMockSuggestorApi()){
+      conceptId = "2384fa7a-d514-3d6a-a0ea-3a711f66d0d8";
     }
-
-    String conceptUri = concepts.get(0);
-    String conceptId = conceptUri.replaceFirst(".+things/","");
-
-
-//        String conceptUri = "http://api.ft.com/things/2384fa7a-d514-3d6a-a0ea-3a711f66d0d8";
-    //String conceptId = "2384fa7a-d514-3d6a-a0ea-3a711f66d0d8";
+    else{
+      logger.warn("IN GETSUGGESTEDCONTENT, ABOUT TO CALL SUGGESTOR CLIENT");
+      List<String> concepts = suggestorApiClient.suggestConcepts(inputText);
+      logger.warn(String.format("FOUND %s CONCEPTS",concepts.size()));
+      if (concepts.isEmpty()) {
+        return Collections.emptyList();
+      }
+      String conceptUri = concepts.get(0);
+      conceptId = conceptUri.replaceFirst(".+things/","");
+    }
 
     List<ContentItemIdentifier> allContentItemIdentifiers = contentApiClient.getContentItemsByConcept(conceptId);
     logger.info(allContentItemIdentifiers.size() + " items found for that concept");

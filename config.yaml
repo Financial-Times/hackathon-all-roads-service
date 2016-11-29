@@ -1,6 +1,8 @@
 suggestorHost: localhost
 suggestorPort: 8080
 
+mockSuggestorApi: ${MOCK_SUGGESTOR_API}
+
 contentApiUrl: http://api.ft.com
 contentApiAuthKey: ${CONTENT_API_AUTH_KEY}
 

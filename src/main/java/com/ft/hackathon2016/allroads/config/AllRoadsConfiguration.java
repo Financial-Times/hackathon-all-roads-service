@@ -11,18 +11,21 @@ public class AllRoadsConfiguration extends Configuration {
   private int suggestorPort;
   private String contentApiUrl;
   private String contentApiAuthKey;
+  private boolean mockSuggestorApi;
 
   public AllRoadsConfiguration(
           @JsonProperty("suggestorHost") String suggestorHost,
           @JsonProperty("suggestorPort") int suggestorPort,
           @JsonProperty("contentApiUrl") String contentApiUrl,
-          @JsonProperty("contentApiAuthKey") String contentApiAuthKey
+          @JsonProperty("contentApiAuthKey") String contentApiAuthKey,
+          @JsonProperty("mockSuggestorApi") boolean mockSuggestorApi
   ) {
     super();
     this.suggestorHost = suggestorHost;
     this.suggestorPort = suggestorPort;
     this.contentApiUrl = contentApiUrl;
     this.contentApiAuthKey = contentApiAuthKey;
+    this.mockSuggestorApi = mockSuggestorApi;
   }
 
   public String getSuggestorHost() {
@@ -39,5 +42,9 @@ public class AllRoadsConfiguration extends Configuration {
 
   public String getContentApiAuthKey() {
     return contentApiAuthKey;
+  }
+
+  public boolean isMockSuggestorApi() {
+    return mockSuggestorApi;
   }
 }
