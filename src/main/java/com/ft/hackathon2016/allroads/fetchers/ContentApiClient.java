@@ -130,9 +130,7 @@ public class ContentApiClient {
                 .filter(a -> "TOPIC".equals (a.getType()))
                 .collect(Collectors.toList());
 
-        // todo what if there are no topics?
-
-        logger.info(allTopics.size() + " topic annotations found for this article: " + contentApiGetArticleResponse.getWebUrl()
+          logger.info(allTopics.size() + " topic annotations found for this article: " + contentApiGetArticleResponse.getWebUrl()
                 + contentApiGetArticleResponse.getTitle());
 
         List<Annotation> allSections = contentApiGetArticleResponse.getAnnotations()

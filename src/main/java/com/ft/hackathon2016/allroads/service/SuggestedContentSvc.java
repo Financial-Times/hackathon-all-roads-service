@@ -47,8 +47,9 @@ public class SuggestedContentSvc {
 
     List<ContentItemIdentifier> allContentItemIdentifiers = contentApiClient.getContentItemsByConcept(conceptId);
     logger.info(allContentItemIdentifiers.size() + " items found for that concept");
-    // Only take 5 .. it could be a very long list
-    List<ContentItemIdentifier> contentItemIdentifiers = allContentItemIdentifiers.subList(0,5);
+    // Only take first 5 .. it could be a very long list
+    int numberOfItemsToFetch = allContentItemIdentifiers.size() > 5 ? 5 : allContentItemIdentifiers.size();
+    List<ContentItemIdentifier> contentItemIdentifiers = allContentItemIdentifiers.subList(0,numberOfItemsToFetch);
 
     ArrayList<SuggestedContent> suggestedContents = new ArrayList<SuggestedContent>();
     for (int i = 0; i < contentItemIdentifiers.size(); i++){
