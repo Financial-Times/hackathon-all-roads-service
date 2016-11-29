@@ -6,6 +6,10 @@ mockSuggestorApi: ${MOCK_SUGGESTOR_API:-false}
 contentApiUrl: http://api.ft.com
 contentApiAuthKey: ${CONTENT_API_AUTH_KEY}
 
+topStoriesLists:
+- 520ddb76-e43d-11e4-9e89-00144feab7de
+- bf3045bc-2402-11e6-aa98-db1e01fabc0c
+
 server:
   applicationConnectors:
     - type: http

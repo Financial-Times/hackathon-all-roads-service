@@ -16,7 +16,7 @@ public class ContentApiGetArticleResponse {
     private final String webUrl;
     private final String standfirst;
     private final List<Annotation> annotations;
-
+    
     public ContentApiGetArticleResponse(
             @JsonProperty("id") final String id,
             @JsonProperty("title") final String title,

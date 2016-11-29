@@ -4,7 +4,7 @@ import com.ft.hackathon2016.allroads.config.AllRoadsConfiguration;
 import com.ft.hackathon2016.allroads.fetchers.ContentApiClient;
 import com.ft.hackathon2016.allroads.fetchers.ContentItemIdentifier;
 import com.ft.hackathon2016.allroads.fetchers.SuggestorApiClient;
-import com.ft.hackathon2016.allroads.model.Annotation;
+import com.ft.hackathon2016.allroads.fetchers.TopStoriesApiClient;
 import com.ft.hackathon2016.allroads.model.Article;
 import com.ft.hackathon2016.allroads.model.SuggestedContent;
 import org.slf4j.Logger;
@@ -21,11 +21,16 @@ public class SuggestedContentSvc {
   private final ContentApiClient contentApiClient;
   private final SuggestorApiClient suggestorApiClient;
   private final AllRoadsConfiguration config;
-
+  private final TopStoriesApiClient topStoriesApiClient;
+  
   public SuggestedContentSvc (AllRoadsConfiguration config){
     this.config = config;
     contentApiClient = new ContentApiClient(config, ClientBuilder.newClient());
     suggestorApiClient = new SuggestorApiClient(ClientBuilder.newClient(), config.getSuggestorHost(), config.getSuggestorPort());
+    
+    topStoriesApiClient = new TopStoriesApiClient(ClientBuilder.newClient(), contentApiClient, config.getContentApiUrl(), config.getContentApiAuthKey(), config.getTopStoriesUUIDs());
+    
+    topStoriesApiClient.refresh();
   }
 
   public List<SuggestedContent> getSuggestedContent(String inputText){

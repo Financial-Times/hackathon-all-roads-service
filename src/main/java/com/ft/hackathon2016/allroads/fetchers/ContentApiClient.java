@@ -11,6 +11,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -111,7 +112,7 @@ public class ContentApiClient {
 
     private Article contentApiResponseToArticle(final ContentApiGetArticleResponse contentApiGetArticleResponse) {
 
-        Annotation annotation = getMostPertinentAnnotation(contentApiGetArticleResponse);
+        Annotation annotation = getMostPertinentAnnotation(contentApiGetArticleResponse.getTitle(), contentApiGetArticleResponse.getWebUrl(), contentApiGetArticleResponse.getAnnotations());
         return new Article(
                     contentApiGetArticleResponse.getId(),
                     contentApiGetArticleResponse.getTitle(),
@@ -119,29 +120,30 @@ public class ContentApiClient {
                     contentApiGetArticleResponse.getPublishedDate(),
                     contentApiGetArticleResponse.getWebUrl(),
                     contentApiGetArticleResponse.getStandfirst(),
-                    annotation
+                    annotation,
+                    contentApiGetArticleResponse.getAnnotations()
        );
 
     }
 
-    private Annotation getMostPertinentAnnotation(ContentApiGetArticleResponse contentApiGetArticleResponse) {
-        List<Annotation> allTopics = contentApiGetArticleResponse.getAnnotations()
+    static Annotation getMostPertinentAnnotation(String title, String webUrl, Collection<Annotation> annotations) {
+        List<Annotation> allTopics = annotations
                 .stream()
                 .filter(a -> "TOPIC".equals (a.getType()))
                 .collect(Collectors.toList());
 
         // todo what if there are no topics?
 
-        logger.info(allTopics.size() + " topic annotations found for this article: " + contentApiGetArticleResponse.getWebUrl()
-                + contentApiGetArticleResponse.getTitle());
+        logger.info(allTopics.size() + " topic annotations found for this article: " + webUrl
+                + title);
 
-        List<Annotation> allSections = contentApiGetArticleResponse.getAnnotations()
+        List<Annotation> allSections = annotations
                 .stream()
                 .filter(a -> "SECTION".equals (a.getType()))
                 .collect(Collectors.toList());
 
-        logger.info(allTopics.size() + " section annotations found for this article: " + contentApiGetArticleResponse.getWebUrl()
-                + contentApiGetArticleResponse.getTitle());
+        logger.info(allTopics.size() + " section annotations found for this article: " + webUrl
+                + title);
 
         if (allTopics.size() > 0){
             return allTopics.get(0);
@@ -150,7 +152,7 @@ public class ContentApiClient {
             return allSections.get(0);
         }
         // just return the first annotation if no topics or section were found
-        return  contentApiGetArticleResponse.getAnnotations().get(0);
+        return  annotations.iterator().next();
 
     }
 }

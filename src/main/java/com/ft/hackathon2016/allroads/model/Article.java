@@ -1,8 +1,9 @@
 package com.ft.hackathon2016.allroads.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Set;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class Article {
 
@@ -13,7 +14,8 @@ public class Article {
     private final String webUrl;
     private final String standfirst;
     private final Annotation annotation;
-
+    private final Set<Annotation> annotations;
+    
     public Article(
            String contentId,
            String title,
@@ -21,7 +23,8 @@ public class Article {
            String publicationDate,
            String webUrl,
            String standfirst,
-           Annotation annotation) {
+           Annotation annotation,
+           Collection<Annotation> annotations) {
         this.contentId = contentId;
         this.title = title;
         this.byline = byline;
@@ -29,6 +32,7 @@ public class Article {
         this.webUrl = webUrl;
         this.standfirst = standfirst;
         this.annotation = annotation;
+        this.annotations = new HashSet<>(annotations);
     }
 
     public String getContentId() {
@@ -57,5 +61,9 @@ public class Article {
 
     public Annotation getAnnotation() {
         return annotation;
+    }
+    
+    public Set<Annotation> getAnnotations() {
+      return annotations;
     }
 }
