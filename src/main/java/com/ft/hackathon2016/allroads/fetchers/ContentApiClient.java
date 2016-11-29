@@ -134,7 +134,23 @@ public class ContentApiClient {
 
         logger.info(allTopics.size() + " topic annotations found for this article: " + contentApiGetArticleResponse.getWebUrl()
                 + contentApiGetArticleResponse.getTitle());
-        return allTopics.get(0);
+
+        List<Annotation> allSections = contentApiGetArticleResponse.getAnnotations()
+                .stream()
+                .filter(a -> "SECTION".equals (a.getType()))
+                .collect(Collectors.toList());
+
+        logger.info(allTopics.size() + " section annotations found for this article: " + contentApiGetArticleResponse.getWebUrl()
+                + contentApiGetArticleResponse.getTitle());
+
+        if (allTopics.size() > 0){
+            return allTopics.get(0);
+        }
+        else if (allSections.size() > 0){
+            return allSections.get(0);
+        }
+        // just return the first annotation if no topics or section were found
+        return  contentApiGetArticleResponse.getAnnotations().get(0);
 
     }
 }
